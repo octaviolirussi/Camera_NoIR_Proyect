@@ -2,14 +2,13 @@
 from PySide6.QtCore import Qt, QSize, QMetaObject
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QPushButton, QStatusBar, QTabWidget, QWidget,
-    QLabel, QVBoxLayout, QHBoxLayout, QListWidget, QListView, QListWidgetItem
+    QMainWindow, QWidget, QLabel, QPushButton, QStatusBar,
+    QTabWidget, QVBoxLayout, QHBoxLayout, QListWidget, QListView, QListWidgetItem
 )
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(700, 600)
 
         # ---- Central Widget ----
@@ -27,21 +26,21 @@ class Ui_MainWindow(object):
         self.labelCamara = QLabel(self.tab)
         self.labelCamara.setObjectName("labelCamara")
         self.labelCamara.setScaledContents(True)
-        self.labelCamara.setMinimumSize(640, 480)
+        self.labelCamara.setMinimumSize(320, 240)
 
         self.pushButton = QPushButton("Take Picture", self.tab)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.setFixedSize(160, 50)
+        self.pushButton.setMinimumSize(160, 50)
 
         # Layout dinámico del tab de cámara
         layoutCamara = QVBoxLayout(self.tab)
-        layoutCamara.addWidget(self.labelCamara, stretch=1)  
+        layoutCamara.addWidget(self.labelCamara, stretch=1)
         botonesLayout = QHBoxLayout()
         botonesLayout.addStretch()
         botonesLayout.addWidget(self.pushButton, alignment=Qt.AlignRight)
         layoutCamara.addLayout(botonesLayout)
-
         self.tab.setLayout(layoutCamara)
+
         self.tabWidget.addTab(self.tab, "Camera")
 
         # ================= TAB 2: FOTOS =================
@@ -57,19 +56,23 @@ class Ui_MainWindow(object):
 
         self.botonEliminar = QPushButton("Delete Picture", self.tab_2)
         self.botonEliminar.setObjectName("DeletePicture")
-        self.botonEliminar.setFixedSize(160, 50)
+        self.botonEliminar.setMinimumSize(160, 50)
 
         # Layout dinámico del tab de fotos
         layoutFotos = QVBoxLayout(self.tab_2)
         layoutFotos.addWidget(self.listaFotos, stretch=1)
-
         botonesLayout2 = QHBoxLayout()
         botonesLayout2.addStretch()
         botonesLayout2.addWidget(self.botonEliminar, alignment=Qt.AlignRight)
         layoutFotos.addLayout(botonesLayout2)
-
         self.tab_2.setLayout(layoutFotos)
+
         self.tabWidget.addTab(self.tab_2, "Folder")
+
+        # ---- Layout principal del central widget ----
+        mainLayout = QVBoxLayout(self.centralwidget)
+        mainLayout.addWidget(self.tabWidget)
+        self.centralwidget.setLayout(mainLayout)
 
         # ---- Status Bar ----
         self.statusbar = QStatusBar(MainWindow)
@@ -78,7 +81,7 @@ class Ui_MainWindow(object):
 
         MainWindow.setCentralWidget(self.centralwidget)
 
-        # ---- Conectar señales y traducciones ----
+        # ---- Traducciones y conexiones ----
         self.retranslateUi(MainWindow)
         QMetaObject.connectSlotsByName(MainWindow)
 
