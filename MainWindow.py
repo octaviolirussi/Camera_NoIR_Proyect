@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from PySide6.QtCore import (QCoreApplication, QMetaObject, QRect, QSize, Qt)
-from PySide6.QtGui import (QIcon, QPixmap)
+from PySide6.QtCore import Qt, QSize, QMetaObject
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QPushButton, QStatusBar, QTabWidget, QWidget,
     QLabel, QVBoxLayout, QHBoxLayout, QListWidget, QListView, QListWidgetItem
@@ -10,7 +10,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(798, 617)
+        MainWindow.resize(700, 600)
 
         # ---- Central Widget ----
         self.centralwidget = QWidget(MainWindow)
@@ -19,7 +19,6 @@ class Ui_MainWindow(object):
         # ---- Tabs ----
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName("tabWidget")
-        self.tabWidget.setGeometry(QRect(0, 0, 801, 601))
 
         # ================= TAB 1: CÁMARA =================
         self.tab = QWidget()
@@ -29,24 +28,21 @@ class Ui_MainWindow(object):
         self.labelCamara.setObjectName("labelCamara")
         self.labelCamara.setScaledContents(True)
         self.labelCamara.setMinimumSize(640, 480)
-        self.labelCamara.setMaximumSize(800, 600)
 
-        # --- Botón para tomar foto ---
-        self.pushButton = QPushButton(self.tab)
+        self.pushButton = QPushButton("Take Picture", self.tab)
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.setFixedSize(160, 50)  
+        self.pushButton.setFixedSize(160, 50)
 
-        # Layout de cámara 
+        # Layout dinámico del tab de cámara
         layoutCamara = QVBoxLayout(self.tab)
-        layoutCamara.addWidget(self.labelCamara, alignment=Qt.AlignCenter)
-
+        layoutCamara.addWidget(self.labelCamara, stretch=1)  
         botonesLayout = QHBoxLayout()
-        botonesLayout.addStretch()  
+        botonesLayout.addStretch()
         botonesLayout.addWidget(self.pushButton, alignment=Qt.AlignRight)
         layoutCamara.addLayout(botonesLayout)
-        self.tab.setLayout(layoutCamara)
 
-        self.tabWidget.addTab(self.tab, "")
+        self.tab.setLayout(layoutCamara)
+        self.tabWidget.addTab(self.tab, "Camera")
 
         # ================= TAB 2: FOTOS =================
         self.tab_2 = QWidget()
@@ -59,21 +55,21 @@ class Ui_MainWindow(object):
         self.listaFotos.setResizeMode(QListView.Adjust)
         self.listaFotos.setSpacing(10)
 
-        self.botonEliminar = QPushButton(self.tab_2)
+        self.botonEliminar = QPushButton("Delete Picture", self.tab_2)
         self.botonEliminar.setObjectName("DeletePicture")
-        self.botonEliminar.setFixedSize(160, 50) 
+        self.botonEliminar.setFixedSize(160, 50)
 
-        # Layout de lista + botón eliminar 
-        layout_tab2 = QVBoxLayout(self.tab_2)
-        layout_tab2.addWidget(self.listaFotos)
+        # Layout dinámico del tab de fotos
+        layoutFotos = QVBoxLayout(self.tab_2)
+        layoutFotos.addWidget(self.listaFotos, stretch=1)
 
         botonesLayout2 = QHBoxLayout()
         botonesLayout2.addStretch()
         botonesLayout2.addWidget(self.botonEliminar, alignment=Qt.AlignRight)
-        layout_tab2.addLayout(botonesLayout2)
-        self.tab_2.setLayout(layout_tab2)
+        layoutFotos.addLayout(botonesLayout2)
 
-        self.tabWidget.addTab(self.tab_2, "")
+        self.tab_2.setLayout(layoutFotos)
+        self.tabWidget.addTab(self.tab_2, "Folder")
 
         # ---- Status Bar ----
         self.statusbar = QStatusBar(MainWindow)
@@ -82,17 +78,14 @@ class Ui_MainWindow(object):
 
         MainWindow.setCentralWidget(self.centralwidget)
 
-        # ---- Traducción y conexiones ----
+        # ---- Conectar señales y traducciones ----
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
         QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", "Camera", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", "Take Picture", None))
-        self.botonEliminar.setText(QCoreApplication.translate("MainWindow", "Delete Picture", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", "Camera", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", "Folder", None))
+        MainWindow.setWindowTitle("Camera")
+        self.pushButton.setText("Take Picture")
+        self.botonEliminar.setText("Delete Picture")
 
     def agregar_foto_a_lista(self, listaWidget, ruta_archivo, ancho=120, alto=90):
         """Agrega una miniatura con nombre debajo al QListWidget"""
