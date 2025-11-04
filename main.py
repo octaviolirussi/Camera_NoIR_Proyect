@@ -25,6 +25,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.botonEliminar.clicked.connect(self.eliminar_foto)
 
+        self.botonSalir.clicked.connect(QtWidgets.QApplication.quit)
+
     #=========================================================== Metodos ===================================================================
 
     def sacar_foto(self):#Llama a capturar_foto de Camara y recibe la imagen
@@ -54,10 +56,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:  # Linux
             subprocess.run(["xdg-open", ruta])
 
-    def closeEvent(self, event): #evento que se llama automaticamente al cerrar la ventana
-        self.camara.detener()
-        event.accept()
-
+    def cerrar_aplicacion(self):
+        self.camara.detener()         
+        QtWidgets.QApplication.quit() 
     
     def eliminar_foto(self):
         item = self.listaFotos.currentItem()  # obtiene el item seleccionado
@@ -88,5 +89,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
+    window.showFullScreen()
     window.show()
     sys.exit(app.exec())

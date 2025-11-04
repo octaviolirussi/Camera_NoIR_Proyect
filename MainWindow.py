@@ -2,8 +2,8 @@
 from PySide6.QtCore import Qt, QSize, QMetaObject
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QLabel, QPushButton, QStatusBar,
-    QTabWidget, QVBoxLayout, QHBoxLayout, QListWidget, QListView, QListWidgetItem
+    QMainWindow, QWidget, QLabel, QPushButton, QStatusBar, QStackedLayout, QSizePolicy, 
+    QTabWidget, QVBoxLayout, QHBoxLayout, QListWidget, QListView, QListWidgetItem, QGridLayout
 )
 
 class Ui_MainWindow(object):
@@ -23,23 +23,43 @@ class Ui_MainWindow(object):
         self.tab = QWidget()
         self.tab.setObjectName("tab")
 
-        self.labelCamara = QLabel(self.tab)
-        self.labelCamara.setObjectName("labelCamara")
+        # --- contenedor principal ---
+        contenedor = QWidget(self.tab)
+        contenedor.setObjectName("contenedorCamara")
+
+        # --- layout en rejilla (superposición total) ---
+        layout = QGridLayout(contenedor)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        # --- vista previa de cámara ---
+        self.labelCamara = QLabel()
         self.labelCamara.setScaledContents(True)
-        self.labelCamara.setMinimumSize(320, 240)
+        self.labelCamara.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layout.addWidget(self.labelCamara, 0, 0)  # fondo
 
-        self.pushButton = QPushButton("Take Picture", self.tab)
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton.setMinimumSize(160, 50)
+        # --- botón superpuesto ---
+        self.pushButton = QPushButton("Take Picture")
+        self.pushButton.setFixedSize(160, 50)
+        self.pushButton.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 150);
+                color: white;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(50, 50, 50, 180);
+            }
+        """)
+        # Alineación: esquina inferior derecha
+        layout.addWidget(self.pushButton, 0, 0, Qt.AlignBottom | Qt.AlignRight)
 
-        # Layout dinámico del tab de cámara
-        layoutCamara = QVBoxLayout(self.tab)
-        layoutCamara.addWidget(self.labelCamara, stretch=1)
-        botonesLayout = QHBoxLayout()
-        botonesLayout.addStretch()
-        botonesLayout.addWidget(self.pushButton, alignment=Qt.AlignRight)
-        layoutCamara.addLayout(botonesLayout)
-        self.tab.setLayout(layoutCamara)
+        # --- layout final del tab ---
+        layoutTab = QVBoxLayout(self.tab)
+        layoutTab.setContentsMargins(0, 0, 0, 0)
+        layoutTab.addWidget(contenedor)
+        self.tab.setLayout(layoutTab)
 
         self.tabWidget.addTab(self.tab, "Camera")
 
@@ -57,6 +77,17 @@ class Ui_MainWindow(object):
         self.botonEliminar = QPushButton("Delete Picture", self.tab_2)
         self.botonEliminar.setObjectName("DeletePicture")
         self.botonEliminar.setMinimumSize(160, 50)
+        self.botonEliminar.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 150);
+                color: white;
+                border-radius: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(50, 50, 50, 180);
+            }
+        """)
 
         # Layout dinámico del tab de fotos
         layoutFotos = QVBoxLayout(self.tab_2)
@@ -80,6 +111,24 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         MainWindow.setCentralWidget(self.centralwidget)
+        
+        #================= Boton Salir ==================
+        self.botonSalir = QPushButton("✕", self)
+        self.botonSalir.setFixedSize(40, 40)
+        self.botonSalir.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 0, 0, 180);
+                color: white;
+                font-size: 20px;
+                border: none;
+                border-radius: 20px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 50, 50, 200);
+            }
+        """)
+
+        self.botonSalir.move(1475, 40)
 
         # ---- Traducciones y conexiones ----
         self.retranslateUi(MainWindow)
