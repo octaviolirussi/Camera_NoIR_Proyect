@@ -38,7 +38,7 @@ class Ui_MainWindow(object):
         self.labelCamara.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         layout.addWidget(self.labelCamara, 0, 0)  # fondo
 
-        # --- botón superpuesto ---
+        # --- botón sacar foto ---
         self.pushButton = QPushButton("Take Picture")
         self.pushButton.setFixedSize(160, 50)
         self.pushButton.setStyleSheet("""
@@ -54,6 +54,25 @@ class Ui_MainWindow(object):
         """)
         # Alineación: esquina inferior derecha
         layout.addWidget(self.pushButton, 0, 0, Qt.AlignBottom | Qt.AlignRight)
+
+        #================= Boton Salir ==================
+        self.botonSalir = QPushButton("✕", self)
+        self.botonSalir.setFixedSize(40, 40)
+        self.botonSalir.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(255, 0, 0, 180);
+                color: white;
+                font-size: 20px;
+                border: none;
+                border-radius: 20px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 50, 50, 200);
+            }
+        """)
+
+        # Alineación: esquina superior derecha
+        layout.addWidget(self.botonSalir, 0, 0, Qt.AlignTop | Qt.AlignRight)
 
         # --- layout final del tab ---
         layoutTab = QVBoxLayout(self.tab)
@@ -111,24 +130,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         MainWindow.setCentralWidget(self.centralwidget)
-        
-        #================= Boton Salir ==================
-        self.botonSalir = QPushButton("✕", self)
-        self.botonSalir.setFixedSize(40, 40)
-        self.botonSalir.setStyleSheet("""
-            QPushButton {
-                background-color: rgba(255, 0, 0, 180);
-                color: white;
-                font-size: 20px;
-                border: none;
-                border-radius: 20px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 50, 50, 200);
-            }
-        """)
 
-        self.botonSalir.move(1475, 40)
 
         # ---- Traducciones y conexiones ----
         self.retranslateUi(MainWindow)
