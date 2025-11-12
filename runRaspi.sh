@@ -7,3 +7,5 @@ source venv/bin/activate
 python main.py
 
 deactivate
+
+shutdown -r now
