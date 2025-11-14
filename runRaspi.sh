@@ -1,6 +1,4 @@
-#!/bin/bash
-
-cd "$(dirname "$0")"
+#!/bin/bash 
 
 source venv/bin/activate
 
@@ -8,4 +6,5 @@ python main.py
 
 deactivate
 
-shutdown -r now
+
+sudo poweroff
